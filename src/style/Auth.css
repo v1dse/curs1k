@@ -1,0 +1,200 @@
+/* ── Auth / Login ─────────────────────────────────────────────────────── */
+
+.auth {
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Grid background */
+.auth::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+/* Glow orb */
+.auth__glow {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #6f050310 0%, #00395510 35%, transparent 70%);
+  pointer-events: none;
+}
+
+.auth__card {
+  position: relative;
+  width: 100%;
+  max-width: 370px;
+  animation: fadeUp 0.4s ease forwards;
+}
+
+.auth__logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 28px;
+  gap: 12px;
+}
+
+.auth__logo-icon {
+  width: 46px; height: 46px;
+  background: linear-gradient(135deg, #003955, #6f0503);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 900;
+  color: white;
+  box-shadow: 0 0 28px rgba(124,58,237,0.28);
+}
+
+.auth__logo-name {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--text-1);
+}
+
+.auth__logo-sub {
+  font-size: 13px;
+  color: var(--text-3);
+  margin-top: -6px;
+}
+
+.auth__box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.auth__error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: rgba(239,68,68,0.07);
+  border: 1px solid rgba(239,68,68,0.2);
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: var(--red);
+}
+
+.auth__error svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+.auth__form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.auth__label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-2);
+  letter-spacing: 0.01em;
+}
+
+.auth__input-wrap {
+  position: relative;
+}
+
+.auth__input {
+  width: 100%;
+  padding: 9px 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 14px;
+  color: var(--text-1);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.auth__input:focus {
+  border-color: rgba(124,58,237,0.5);
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.08);
+}
+
+.auth__input::placeholder { color: var(--text-4); }
+
+.auth__input--pass { padding-right: 40px; }
+
+.auth__eye {
+  position: absolute;
+  right: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-4);
+  display: flex;
+  padding: 2px;
+  transition: color 0.15s;
+}
+
+.auth__eye:hover { color: var(--text-2); }
+.auth__eye svg { width: 15px; height: 15px; }
+
+.auth__submit {
+  width: 100%;
+  padding: 10px;
+  background: linear-gradient(135deg, #003955, #6f0503);;
+  border: none;
+  border-radius: var(--radius);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background 0.15s, transform 0.1s, opacity 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.auth__submit:hover:not(:disabled) { background: linear-gradient(135deg, #003940, #6f0100); }
+.auth__submit:active:not(:disabled) { transform: scale(0.99); }
+.auth__submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.auth__hint {
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: rgba(124,58,237,0.05);
+  border: 1px solid rgba(124,58,237,0.1);
+  border-radius: var(--radius);
+}
+
+.auth__hint p {
+  font-size: 12px;
+  color: var(--text-3);
+  line-height: 1.7;
+}
+
+.auth__hint strong { color: var(--text-2); font-weight: 600; }
