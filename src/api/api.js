@@ -1,6 +1,4 @@
-// ─── API CLIENT ────────────────────────────────────────────────────────────────
-// All requests go to FastAPI backend via CRA proxy (localhost:8000)
-// To use: set "proxy": "http://localhost:8000" in package.json (already done)
+
 
 const BASE = process.env.REACT_APP_API_URL || '';
 
@@ -98,7 +96,7 @@ export async function apiGetProgress(courseId) {
   return request('GET', `/api/progress/course/${courseId}`);
 }
 
-// ─── MOCK FALLBACK (used when backend is offline) ──────────────────────────────
+
 // Remove this section once FastAPI is connected
 
 const MOCK_COURSES = [
