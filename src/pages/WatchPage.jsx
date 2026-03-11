@@ -11,7 +11,7 @@ import {
 } from '../elements/Icons';
 import '../style/Watch.css';
 
-// ─── VIDEO PLAYER ────────────────────────────────────────────────────────────
+// VIDEO PLAYER 
 
 function VideoPlayer({ videoUrl, title, onEnded }) {
   const videoRef = useRef(null);
@@ -39,7 +39,7 @@ function VideoPlayer({ videoUrl, title, onEnded }) {
         return u.searchParams.get('v') || '';
       }
     } catch {
-      // not a valid URL, maybe raw id
+      // Недействительный URL, возможно, используется необработанный идентификатор.
       return url;
     }
     return '';

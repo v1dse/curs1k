@@ -114,7 +114,7 @@ export default function AdminPage() {
         const data = Mock.getCourses();
         setCourses(data);
       } else {
-        // В реальном backend здесь лучше требовать пароль/2FA
+
         apiDeleteCourse(id);
         apiGetCourses().then(setCourses);
       }
