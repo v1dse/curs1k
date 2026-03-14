@@ -98,12 +98,7 @@ export default function LoginPage() {
           </form>
         </div>
 
-        <div className="auth__hint">
-          <p>
-            <strong>Демо аккаунты:</strong><br />
-            admin / admin123 &nbsp;·&nbsp; user / user123
-          </p>
-        </div>
+
       </div>
     </div>
   );

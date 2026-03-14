@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { useAuth } from '../elements/AuthContext';
-import { apiGetCourses, apiCreateCourse, apiDeleteCourse, Mock } from '../api/api';
+import { apiGetCourses, apiCreateCourse, apiDeleteCourse, apiAdminRegisterUser, Mock } from '../api/api';
 import { IconBook, IconBarChart, IconUser, IconAlert } from '../elements/Icons';
 import '../style/Admin.css';
 
@@ -21,6 +21,8 @@ export default function AdminPage() {
     category: 'Frontend',
     lessons_count: 0,
   });
+  const [newUser, setNewUser] = useState({ username: '', password: '', role: 'user' });
+  const [registering, setRegistering] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -114,13 +116,34 @@ export default function AdminPage() {
         const data = Mock.getCourses();
         setCourses(data);
       } else {
-
         apiDeleteCourse(id);
         apiGetCourses().then(setCourses);
       }
     } catch (e) {
       console.error(e);
       setError(e.message || 'Не удалось удалить курс');
+    }
+  };
+
+  const handleRegisterUser = async (e) => {
+    e.preventDefault();
+    const username = newUser.username.trim();
+    const password = newUser.password;
+    if (!username || !password) return;
+    setRegistering(true);
+    setError('');
+    try {
+      if (useMock) {
+        Mock.registerUser(username, password, newUser.role);
+        setNewUser({ username: '', password: '', role: 'user' });
+      } else {
+        await apiAdminRegisterUser(username, password, newUser.role);
+        setNewUser({ username: '', password: '', role: 'user' });
+      }
+    } catch (e) {
+      setError(e.message || 'Не удалось зарегистрировать пользователя');
+    } finally {
+      setRegistering(false);
     }
   };
 
@@ -146,16 +169,6 @@ export default function AdminPage() {
           )}
         </header>
 
-        <section className="admin__hint fade-up">
-          <IconAlert size={14} />
-          <div>
-            <div className="admin__hint-title">Демо режим</div>
-            <div className="admin__hint-text">
-              Для входа в админку используйте аккаунт <strong>admin / admin123</strong>.
-              В режиме MOCK данные курсов хранятся в localStorage.
-            </div>
-          </div>
-        </section>
 
         <section className="admin__grid fade-up">
           <div className="admin-card admin-card--main">
@@ -394,6 +407,62 @@ export default function AdminPage() {
               Администрирование курсов через API появится после подключения FastAPI backend.
             </div>
           )}
+        </section>
+
+        <section className="admin__manage admin__manage--users fade-up">
+          <div className="admin__manage-header">
+            <h2 className="admin__manage-title">Регистрация пользователей</h2>
+            <span className="admin-card__tag admin-card__tag--muted">
+              <IconUser size={13} />
+              Только для админа
+            </span>
+          </div>
+          <form className="admin-form" onSubmit={handleRegisterUser}>
+            <div className="admin-form__row">
+              <div className="admin-form__field">
+                <label className="admin-form__label">Логин</label>
+                <input
+                  className="admin-form__input"
+                  type="text"
+                  value={newUser.username}
+                  onChange={e => setNewUser(p => ({ ...p, username: e.target.value }))}
+                  placeholder="username"
+                  autoComplete="off"
+                />
+              </div>
+              <div className="admin-form__field">
+                <label className="admin-form__label">Пароль</label>
+                <input
+                  className="admin-form__input"
+                  type="password"
+                  value={newUser.password}
+                  onChange={e => setNewUser(p => ({ ...p, password: e.target.value }))}
+                  placeholder="••••••••"
+                  autoComplete="new-password"
+                />
+              </div>
+              <div className="admin-form__field admin-form__field--small">
+                <label className="admin-form__label">Роль</label>
+                <select
+                  className="admin-form__input admin-form__select"
+                  value={newUser.role}
+                  onChange={e => setNewUser(p => ({ ...p, role: e.target.value }))}
+                >
+                  <option value="user">Пользователь</option>
+                  <option value="admin">Администратор</option>
+                </select>
+              </div>
+              <div className="admin-form__actions">
+                <button
+                  type="submit"
+                  className="admin-form__submit"
+                  disabled={registering || !newUser.username.trim() || !newUser.password}
+                >
+                  {registering ? 'Регистрируем...' : 'Зарегистрировать'}
+                </button>
+              </div>
+            </div>
+          </form>
         </section>
 
         {error && (

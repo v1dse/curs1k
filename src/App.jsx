@@ -25,6 +25,7 @@ function PrivateRoute({ children }) {
   return token ? children : <Navigate to="/login" replace />;
 }
 
+
 function AppRoutes() {
   return (
     <Routes>

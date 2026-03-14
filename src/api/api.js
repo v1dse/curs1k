@@ -1,6 +1,6 @@
 
 
-const BASE = process.env.REACT_APP_API_URL || '';
+const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 function getToken() {
   return localStorage.getItem('sp_token');
@@ -57,6 +57,10 @@ export async function apiLogin(username, password) {
 
 export async function apiVerify() {
   return request('GET', '/api/auth/me');
+}
+
+export async function apiAdminRegisterUser(username, password, role = 'user') {
+  return request('POST', '/api/admin/users', { username, password, role });
 }
 
 // ─── COURSES ───────────────────────────────────────────────────────────────────
@@ -211,8 +215,19 @@ function applyWatch(courses) {
 }
 
 export const Mock = {
+  registerUser(username, password, role = 'user') {
+    const ACCOUNTS_KEY = 'sp_mock_accounts';
+    const raw = localStorage.getItem(ACCOUNTS_KEY);
+    const accounts = raw ? JSON.parse(raw) : { admin: { pass: 'admin123', role: 'admin' }, user: { pass: 'user123', role: 'user' }, vlad: { pass: 'vlad123', role: 'user' } };
+    if (accounts[username]) throw new Error('Пользователь уже существует');
+    accounts[username] = { pass: password, role: role === 'admin' ? 'admin' : 'user' };
+    localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
+    return { id: Date.now(), username, role: accounts[username].role };
+  },
   login(username, password) {
-    const accounts = { admin: { pass: 'admin123', role: 'admin' }, user: { pass: 'user123', role: 'user' }, vlad: { pass: 'vlad123', role: 'user' } };
+    const ACCOUNTS_KEY = 'sp_mock_accounts';
+    const raw = localStorage.getItem(ACCOUNTS_KEY);
+    const accounts = raw ? JSON.parse(raw) : { admin: { pass: 'admin123', role: 'admin' }, user: { pass: 'user123', role: 'user' }, vlad: { pass: 'vlad123', role: 'user' } };
     const acc = accounts[username];
     if (!acc || acc.pass !== password) throw new Error('Неверный логин или пароль');
     return { access_token: 'mock_' + Date.now(), token_type: 'bearer', user: { id: 1, username, role: acc.role } };

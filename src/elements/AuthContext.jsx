@@ -4,7 +4,7 @@ import { apiLogin, apiVerify, Mock } from '../api/api';
 const AuthCtx = createContext(null);
 
 // Set USE_MOCK = false when FastAPI backend is running
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
